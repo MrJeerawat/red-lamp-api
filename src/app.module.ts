@@ -1,16 +1,23 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CategoriesController } from './categories/categories.controller';
 import { CategoriesModule } from './categories/categories.module';
-import { AttributesService } from './attributes/attributes.service';
-import { AttributesController } from './attributes/attributes.controller';
 import { AttributesModule } from './attributes/attributes.module';
 import { BeveragesModule } from './beverages/beverages.module';
+import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [CategoriesModule, AttributesModule, BeveragesModule],
-  controllers: [AppController, CategoriesController, AttributesController],
-  providers: [AppService, AttributesService],
+  imports: [
+    ConfigModule.forRoot(),
+    MongooseModule.forRoot(
+      `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@klassbit.pfqcuao.mongodb.net/coffeeShop?retryWrites=true&w=majority`,
+    ),
+    CategoriesModule,
+    AttributesModule,
+    BeveragesModule,
+  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
